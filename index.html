@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pobieranie plików</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 2rem;
+      width: 100%;
+      max-width: 520px;
+    }
+
+    h1 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      color: #f1f5f9;
+    }
+
+    .file-list {
+      list-style: none;
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .file-item {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+    }
+
+    .file-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+    }
+
+    .file-name { color: #94a3b8; }
+
+    .file-status {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+
+    .status-pending  { background: #1e3a5f; color: #60a5fa; }
+    .status-loading  { background: #1c3a2e; color: #34d399; }
+    .status-done     { background: #1a3a2e; color: #4ade80; }
+    .status-error    { background: #3a1a1a; color: #f87171; }
+
+    .progress-bar-bg {
+      background: #334155;
+      border-radius: 999px;
+      height: 6px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      width: 0%;
+      transition: width 0.15s ease;
+      background: linear-gradient(90deg, #3b82f6, #06b6d4);
+    }
+
+    .overall {
+      margin-bottom: 1.5rem;
+    }
+
+    .overall-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: #64748b;
+      margin-bottom: 0.4rem;
+    }
+
+    .overall .progress-bar-bg { height: 8px; }
+    .overall .progress-bar-fill {
+      background: linear-gradient(90deg, #6366f1, #a855f7);
+    }
+
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 8px;
+      background: #3b82f6;
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button:hover:not(:disabled) { background: #2563eb; }
+    button:disabled { background: #1e3a5f; color: #475569; cursor: not-allowed; }
+
+    .log {
+      margin-top: 1rem;
+      font-size: 0.75rem;
+      color: #475569;
+      min-height: 1.2em;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+<div class="card">
+  <h1>Pobieranie plików &amp; pakowanie ZIP</h1>
+
+  <div class="overall">
+    <div class="overall-header">
+      <span>Ogólny postęp</span>
+      <span id="overall-label">0 / 0</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="overall-bar"></div>
+    </div>
+  </div>
+
+  <ul class="file-list" id="file-list"></ul>
+
+  <button id="btn" onclick="start()">Pobierz i spakuj do ZIP</button>
+  <div class="log" id="log"></div>
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>
